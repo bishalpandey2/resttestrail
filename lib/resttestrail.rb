@@ -12,11 +12,15 @@ module Resttestrail
   Resttestrail.config.project_id = 26
   Resttestrail.config.username = "bizops-testeng1@groupon.com"
   Resttestrail.config.password = "password"
+  suite_id = 1261
+  test_case_id = 197611
 
   puts "host = #{Resttestrail.config.host}, port = #{Resttestrail.config.port}"
 
   client = Resttestrail::Client.instance
-  run_id = client.add_run("an amazing run #{Time.new.strftime("%H_%M_%S_%N")}", 1261)
+  run_id = client.add_run("an amazing run #{Time.new.strftime("%H_%M_%S_%N")}", suite_id)
   puts "run id = #{run_id}"
 
+  run_test_case_id = client.add_result_for_case(run_id, test_case_id, Resttestrail::Requests::TEST_STATUS_PASSED, 24, nil)
+  puts "run test_case_id = #{run_test_case_id}"
 end

@@ -18,4 +18,18 @@ describe Resttestrail::Requests do
     expect(add_run_request.path).to eq "/index.php?/api/v2/add_run/37"
     expect(add_run_request.body).to eq "{\"suite_id\":1234,\"name\":\"an amazing run\",\"include_all\":true}"
   end
+
+  it "makes the add result for case request for passed test" do
+    add_result_for_case_request = Resttestrail::Requests.add_result_for_case(1234, 45, Resttestrail::Requests::TEST_STATUS_PASSED, 37, nil)
+    expect(add_result_for_case_request.method).to eq "POST"
+    expect(add_result_for_case_request.path).to eq "/index.php?/api/v2/add_result_for_case/1234/45"
+    expect(add_result_for_case_request.body).to eq "{\"status_id\":1,\"elapsed\":\"37s\"}"
+  end
+
+  it "makes the add result for case request for failed test" do
+    add_result_for_case_request = Resttestrail::Requests.add_result_for_case(1234, 45, Resttestrail::Requests::TEST_STATUS_FAILED, 37, "some exception")
+    expect(add_result_for_case_request.method).to eq "POST"
+    expect(add_result_for_case_request.path).to eq "/index.php?/api/v2/add_result_for_case/1234/45"
+    expect(add_result_for_case_request.body).to eq "{\"status_id\":5,\"elapsed\":\"37s\",\"defects\":\"some exception\"}"
+  end
 end

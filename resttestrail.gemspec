@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Resttestrail::VERSION
   spec.authors       = ["Syed Hussain"]
   spec.email         = ["shussain@groupon.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
+  spec.summary       = %q{Gem for Testrail rest api}
   spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ""
   spec.license       = "MIT"
