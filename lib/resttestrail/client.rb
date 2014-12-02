@@ -29,17 +29,16 @@ module Resttestrail
       end
 
       begin
-        response_body = JSON.parse(http_response.body)
         success = http_response.code == "200" && http_response.message == "OK"
-        body = success ? response_body : nil
+        body = success ? JSON.parse(http_response.body) : nil
         error = success ? nil : http_response.message
         response_hash = {:success => success, :body => body, :error => error}
-      rescue JSON::ParseError => e
+      rescue Exception => e
         raise Resttestrail::TestrailError.new({:success => false, :body => http_response.body, :error => e}), "Error while parsing response"
       end
 
       unless success
-        raise Resttestrail::TestrailError.new(response_hash), "Unsuccessful"
+        raise Resttestrail::TestrailError.new(response_hash), "Unsuccessful response"
       end
 
       response_hash

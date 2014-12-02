@@ -1,6 +1,8 @@
-require "./resttestrail/version"
-require "./resttestrail/config"
-require "./resttestrail/client"
+#!/usr/bin/env ruby
+
+require "./lib/resttestrail/version"
+require "./lib/resttestrail/config"
+require "./lib/resttestrail/client"
 require 'pry'
 
 module Resttestrail
