@@ -32,4 +32,11 @@ describe Resttestrail::Requests do
     expect(add_result_for_case_request.path).to eq "/index.php?/api/v2/add_result_for_case/1234/45"
     expect(add_result_for_case_request.body).to eq "{\"status_id\":5,\"elapsed\":\"37s\",\"defects\":\"some exception\"}"
   end
+
+  it "makes the close run request" do
+    close_run_request = Resttestrail::Requests.close_run(1234)
+    expect(close_run_request.method).to eq "POST"
+    expect(close_run_request.path).to eq "/index.php?/api/v2/close_run/1234"
+    expect(close_run_request.body).to eq nil
+  end
 end

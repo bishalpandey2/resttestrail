@@ -29,6 +29,12 @@ module Resttestrail
       http_response[:body]["id"]
     end
 
+    def self.close_run(run_id)
+      request = Resttestrail::Requests.close_run(run_id)
+      http_response = Resttestrail::Client.response(@net_http.request(request))
+      http_response[:body]["id"]
+    end
+
     def self.response(http_response)
       if (http_response.nil? || http_response.body.nil?)
         raise Resttestrail::TestrailError.new({:success => false, :body => nil, :error => nil}), "Received nil response"

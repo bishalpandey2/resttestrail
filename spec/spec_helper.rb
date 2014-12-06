@@ -16,12 +16,14 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 Bundler.setup
-require './lib/resttestrail/requests'
-require './lib/resttestrail/client'
-require './lib/resttestrail/config'
-require './lib/resttestrail/testrailerror'
 
 require 'pry'
+
+require './lib/resttestrail/config'
+require './lib/resttestrail/client'
+require './lib/resttestrail/requests'
+require './lib/resttestrail/testrailerror'
+
 
 RSpec.configure do |config|
 # The settings below are suggested to provide a good initial experience
