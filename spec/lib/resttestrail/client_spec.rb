@@ -68,5 +68,14 @@ describe Resttestrail::Client do
       }
     end
 
+    it "does not raise error for an empty string response body" do
+      http_response = Net::HTTPResponse.new("1.1", "200", "OK")
+      hash_object = {:success=>true, :code=>"200", :body=>"", :message=>"OK"}
+      allow(http_response).to receive_messages(:stream_check => true, :body => "")
+      expect { Resttestrail::Client.response(http_response) }.not_to raise_error
+      response = Resttestrail::Client.response(http_response)
+      expect(response).to eq hash_object
+    end
+
   end
 end

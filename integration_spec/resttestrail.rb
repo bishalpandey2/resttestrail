@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require "./lib/resttestrail/version"
+require "./lib/resttestrail/testrailerror"
 require "./lib/resttestrail/config"
 require "./lib/resttestrail/client"
 require 'pry'
@@ -17,10 +18,24 @@ module Resttestrail
 
   puts "host = #{Resttestrail.config.host}, port = #{Resttestrail.config.port}"
 
-  client = Resttestrail::Client.instance
-  run_id = client.add_run("an amazing run #{Time.new.strftime("%H_%M_%S_%N")}", suite_id)
-  puts "run id = #{run_id}"
+  begin
+    client = Resttestrail::Client.instance
+    run_id = client.add_run("an amazing run #{Time.new.strftime("%H_%M_%S_%N")}", suite_id)
+    puts "run id = #{run_id}"
 
-  run_test_case_id = client.add_result_for_case(run_id, test_case_id, Resttestrail::Requests::TEST_STATUS_PASSED, 24, nil)
-  puts "run test_case_id = #{run_test_case_id}"
+    run_test_case_id = client.add_result_for_case(run_id, test_case_id, Resttestrail::Requests::TEST_STATUS_PASSED, 24, nil)
+    puts "new test_case_id = #{run_test_case_id}"
+
+    new_run = client.get_run(run_id)
+    puts "run data= #{new_run}"
+
+    client.delete_run(run_id)
+    puts "run deleted"
+
+    puts "Finished!!"
+  rescue TestrailError => e
+    puts "Exception:"
+    puts "Message = #{e.message}"
+    puts "Hash = #{e.object}"
+  end
 end

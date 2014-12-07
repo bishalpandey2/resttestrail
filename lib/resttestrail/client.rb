@@ -28,6 +28,11 @@ module Resttestrail
       Resttestrail::Client.response(@net_http.request(request))
     end
 
+    def delete_run(run_id)
+      request = Resttestrail::Requests.delete_run(run_id)
+      Resttestrail::Client.response(@net_http.request(request))
+    end
+
     def add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception=nil)
       request = Resttestrail::Requests.add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception=nil)
       http_response = Resttestrail::Client.response(@net_http.request(request))
@@ -55,7 +60,7 @@ module Resttestrail
       raise Resttestrail::TestrailError.new(response_hash), "Unsuccessful response" unless response_hash[:success]
 
       begin
-        response_hash[:body] = JSON.parse(http_response.body)
+        response_hash[:body] = (http_response.body == "") ? "" : JSON.parse(http_response.body)
         response_hash[:success] = true
       rescue StandardError => e
         response_hash[:success] = false

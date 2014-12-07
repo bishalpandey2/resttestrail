@@ -39,4 +39,18 @@ describe Resttestrail::Requests do
     expect(close_run_request.path).to eq "/index.php?/api/v2/close_run/1234"
     expect(close_run_request.body).to eq nil
   end
+
+  it "makes the get run request" do
+    get_run_request = Resttestrail::Requests.get_run(1234)
+    expect(get_run_request.method).to eq "GET"
+    expect(get_run_request.path).to eq "/index.php?/api/v2/get_run/1234"
+    expect(get_run_request.body).to eq nil
+  end
+
+  it "makes the delete run request" do
+    delete_run_request = Resttestrail::Requests.delete_run(1234)
+    expect(delete_run_request.method).to eq "POST"
+    expect(delete_run_request.path).to eq "/index.php?/api/v2/delete_run/1234"
+    expect(delete_run_request.body).to eq nil
+  end
 end
