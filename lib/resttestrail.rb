@@ -1,4 +1,4 @@
-require './lib/resttestrail/config'
-require './lib/resttestrail/client'
-require './lib/resttestrail/requests'
-require './lib/resttestrail/testrailerror'
+require 'resttestrail/config'
+require 'resttestrail/client'
+require 'resttestrail/requests'
+require 'resttestrail/testrailerror'

@@ -1,6 +1,6 @@
 require 'net/http'
 require 'multi_json'
-require './lib/resttestrail/requests'
+require 'resttestrail/requests'
 
 
 module Resttestrail
@@ -34,7 +34,7 @@ module Resttestrail
     end
 
     def add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception=nil)
-      request = Resttestrail::Requests.add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception=nil)
+      request = Resttestrail::Requests.add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception)
       http_response = Resttestrail::Client.response(@net_http.request(request))
       http_response[:body]["id"]
     end
