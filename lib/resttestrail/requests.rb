@@ -39,7 +39,7 @@ module Resttestrail
         elapsed_time = elapsed_time_secs.round.to_s+"s"
         body.merge!("elapsed" => elapsed_time)
       end
-      body.merge!("defects" => exception) unless exception.nil?
+      body.merge!("comment" => exception) unless exception.nil?
       request.body = body.to_json
       request
     end
