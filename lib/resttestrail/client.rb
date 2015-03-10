@@ -33,8 +33,8 @@ module Resttestrail
       Resttestrail::Client.response(@net_http.request(request))
     end
 
-    def add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception=nil)
-      request = Resttestrail::Requests.add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception)
+    def add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, comment=nil, defects=nil)
+      request = Resttestrail::Requests.add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, comment, defects)
       http_response = Resttestrail::Client.response(@net_http.request(request))
       http_response[:body]["id"]
     end

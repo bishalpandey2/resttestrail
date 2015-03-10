@@ -30,7 +30,7 @@ module Resttestrail
       Net::HTTP::Post.new("#{URI}#{DELETE_RUN}#{run_id}", initheader = {'Content-Type' => 'application/json', 'Authorization' => basic_auth_string})
     end
 
-    def self.add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, exception=nil)
+    def self.add_result_for_case(run_id, test_case_id, status, elapsed_time_secs, comment=nil, defects=nil)
       uri = "#{URI}#{ADD_RESULT_FOR_CASE}#{run_id}/#{test_case_id}"
       request = Net::HTTP::Post.new(uri, initheader = {'Content-Type' => 'application/json', 'Authorization' => basic_auth_string})
       body = {"status_id" => status}
@@ -39,7 +39,8 @@ module Resttestrail
         elapsed_time = elapsed_time_secs.round.to_s+"s"
         body.merge!("elapsed" => elapsed_time)
       end
-      body.merge!("comment" => exception) unless exception.nil?
+      body.merge!("comment" => comment) if (!comment.nil? && comment.is_a?(String))
+      body.merge!("defects" => defects[0...250]) if (!defects.nil? && defects.is_a?(String))
       request.body = body.to_json
       request
     end

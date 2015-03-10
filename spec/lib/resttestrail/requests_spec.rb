@@ -26,11 +26,45 @@ describe Resttestrail::Requests do
     expect(add_result_for_case_request.body).to eq "{\"status_id\":1,\"elapsed\":\"37s\"}"
   end
 
-  it "makes the add result for case request for failed test" do
-    add_result_for_case_request = Resttestrail::Requests.add_result_for_case(1234, 45, Resttestrail::Requests::TEST_STATUS_FAILED, 37, "some exception")
+  it "makes the add result for case request for failed test with some comments" do
+    add_result_for_case_request = Resttestrail::Requests.add_result_for_case(1234, 45, Resttestrail::Requests::TEST_STATUS_FAILED, 37, "some comments")
     expect(add_result_for_case_request.method).to eq "POST"
     expect(add_result_for_case_request.path).to eq "/index.php?/api/v2/add_result_for_case/1234/45"
-    expect(add_result_for_case_request.body).to eq "{\"status_id\":5,\"elapsed\":\"37s\",\"defects\":\"some exception\"}"
+    expect(add_result_for_case_request.body).to eq "{\"status_id\":5,\"elapsed\":\"37s\",\"comment\":\"some comments\"}"
+    expect(add_result_for_case_request.body["defects"]).to be_nil
+  end
+
+  it "makes the add result for case request for failed test with some defects" do
+    add_result_for_case_request = Resttestrail::Requests.add_result_for_case(1234, 45, Resttestrail::Requests::TEST_STATUS_FAILED, 37, nil, "some defects")
+    expect(add_result_for_case_request.method).to eq "POST"
+    expect(add_result_for_case_request.path).to eq "/index.php?/api/v2/add_result_for_case/1234/45"
+    body = JSON.parse(add_result_for_case_request.body)
+    expect(body["status_id"]).to eq 5
+    expect(body["elapsed"]).to eq "37s"
+    expect(body["comment"]).to be_nil
+    expect(body["defects"]).to eq "some defects"
+  end
+
+  it "makes the add result for case request for failed test with defects which is not string" do
+    add_result_for_case_request = Resttestrail::Requests.add_result_for_case(1234, 45, Resttestrail::Requests::TEST_STATUS_FAILED, 37, "some comments", 1234)
+    expect(add_result_for_case_request.method).to eq "POST"
+    expect(add_result_for_case_request.path).to eq "/index.php?/api/v2/add_result_for_case/1234/45"
+    body = JSON.parse(add_result_for_case_request.body)
+    expect(body["status_id"]).to eq 5
+    expect(body["elapsed"]).to eq "37s"
+    expect(body["comment"]).to eq "some comments"
+    expect(body["defects"]).to be_nil
+  end
+
+  it "makes the add result for case request for failed test with defects which is longer than 250 chars" do
+    add_result_for_case_request = Resttestrail::Requests.add_result_for_case(1234, 45, Resttestrail::Requests::TEST_STATUS_FAILED, 37, "some comments", "a"*300)
+    expect(add_result_for_case_request.method).to eq "POST"
+    expect(add_result_for_case_request.path).to eq "/index.php?/api/v2/add_result_for_case/1234/45"
+    body = JSON.parse(add_result_for_case_request.body)
+    expect(body["status_id"]).to eq 5
+    expect(body["elapsed"]).to eq "37s"
+    expect(body["comment"]).to eq "some comments"
+    expect(body["defects"]).to eq "a"*250
   end
 
   it "makes the close run request" do
