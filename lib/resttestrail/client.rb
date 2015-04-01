@@ -17,6 +17,22 @@ module Resttestrail
       @net_http = Net::HTTP.new(Resttestrail.config.host, Resttestrail.config.port)
     end
 
+    def add_case(section_id, title, type_id, priority_id, estimate=nil, milestone_id=nil, refs=nil)
+      request = Resttestrail::Requests.add_case(section_id, title, type_id, priority_id, estimate, milestone_id, refs)
+      http_response = Resttestrail::Client.response(@net_http.request(request))
+      http_response[:body]["id"]
+    end
+
+    def get_case(case_id)
+      request = Resttestrail::Requests.get_case(case_id)
+      Resttestrail::Client.response(@net_http.request(request))
+    end
+
+    def delete_case(case_id)
+      request = Resttestrail::Requests.delete_case(case_id)
+      Resttestrail::Client.response(@net_http.request(request))
+    end
+
     def add_run(run_name, suite_id)
       request = Resttestrail::Requests.add_run(run_name, suite_id)
       http_response = Resttestrail::Client.response(@net_http.request(request))

@@ -5,6 +5,9 @@ module Resttestrail
 
   module Requests
     URI = "/index.php?/api/v2"
+    ADD_CASE = "/add_case/"
+    GET_CASE = "/get_case/"
+    DELETE_CASE = "/delete_case/"
     ADD_RUN = "/add_run/"
     GET_RUN = "/get_run/"
     DELETE_RUN = "/delete_run/"
@@ -14,6 +17,44 @@ module Resttestrail
     TEST_STATUS_PASSED = 1
     TEST_STATUS_FAILED = 5
     TEST_STATUS_BLOCKED = 2
+
+    module Case_Type
+      ACCEPTANCE    = 10
+      COMPREHENSIVE = 9
+      SMOKE         = 8
+      SCENARIO      = 7
+      OTHER         = 6
+      USABILITY     = 5
+      REGRESSION    = 4
+      PERFORMANCE   = 3
+      FUNCTIONALITY = 2
+    end
+
+    module Case_Priority
+      CRITICAL = 7
+      HIGH     = 4
+      MEDIUM   = 3
+      LOW      = 5
+    end
+
+    def self.add_case(section_id, title, type_id, priority_id, estimate, milestone_id, refs)
+      uri = "#{URI}#{ADD_CASE}#{section_id}"
+      request = Net::HTTP::Post.new(uri, initheader = {'Content-Type' => 'application/json', 'Authorization' => basic_auth_string})
+      body = {"title" => title, "type_id" => type_id, "priority_id" => priority_id}
+      body.merge!("estimate" => estimate) if (!estimate.nil? && estimate.is_a?(String))
+      body.merge!("milestone_id" => milestone_id) if (!milestone_id.nil? && milestone_id.is_a?(Integer))
+      body.merge!("refs" => refs) if (!refs.nil? && refs.is_a?(String))
+      request.body = body.to_json
+      request
+    end
+
+    def self.get_case(case_id)
+      Net::HTTP::Get.new("#{URI}#{GET_CASE}#{case_id}", initheader = {'Content-Type' => 'application/json', 'Authorization' => basic_auth_string})
+    end
+
+    def self.delete_case(case_id)
+      Net::HTTP::Post.new("#{URI}#{DELETE_CASE}#{case_id}", initheader = {'Content-Type' => 'application/json', 'Authorization' => basic_auth_string})
+    end
 
     def self.add_run(run_name, suite_id)
       uri = "#{URI}#{ADD_RUN}#{Resttestrail.config.project_id}"

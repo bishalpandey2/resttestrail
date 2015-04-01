@@ -20,6 +20,14 @@ module Resttestrail
 
   begin
     client = Resttestrail::Client.instance
+
+    new_test_case_id = client.add_case(72621, "a new test case - delete me",
+                                    Resttestrail::Requests::Case_Type::FUNCTIONALITY,
+                                    Resttestrail::Requests::Case_Priority::MEDIUM,
+                                    estimate="1m 14s", milestone_id=nil, refs="REF1 REF2")
+    puts client.get_case(new_test_case_id)
+    client.delete_case(new_test_case_id)
+
     run_id = client.add_run("an amazing run #{Time.new.strftime("%H_%M_%S_%N")}", suite_id)
     puts "run id = #{run_id}"
 

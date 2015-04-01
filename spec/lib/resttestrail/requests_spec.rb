@@ -12,6 +12,63 @@ describe Resttestrail::Requests do
     expect(Resttestrail::Requests.basic_auth_string).to eq "Basic c29tZV91c2VybmFtZTpzb21lX3Bhc3N3b3Jk\n"
   end
 
+  it "makes the add test case request" do
+    add_test_case_request = Resttestrail::Requests.add_case("12345", "a great test",
+                                                            Resttestrail::Requests::Case_Type::SMOKE,
+                                                            Resttestrail::Requests::Case_Priority::MEDIUM,
+                                                            "1m 10s", 4321, "REF1, REF2")
+    expect(add_test_case_request.method).to eq "POST"
+    expect(add_test_case_request.path).to eq "/index.php?/api/v2/add_case/12345"
+    body = JSON.parse(add_test_case_request.body)
+    expect(body).to be == {"title" => "a great test", "type_id" => Resttestrail::Requests::Case_Type::SMOKE,
+                           "priority_id" => Resttestrail::Requests::Case_Priority::MEDIUM,
+                           "estimate" => "1m 10s", "milestone_id" => 4321, "refs" => "REF1, REF2"}
+  end
+
+  it "makes the add test case request with nil estimate, milestone_id and refs" do
+    add_test_case_request = Resttestrail::Requests.add_case("12345", "a great test",
+                                                            Resttestrail::Requests::Case_Type::SMOKE,
+                                                            Resttestrail::Requests::Case_Priority::MEDIUM,
+                                                            nil, nil, nil)
+    expect(add_test_case_request.method).to eq "POST"
+    expect(add_test_case_request.path).to eq "/index.php?/api/v2/add_case/12345"
+    body = JSON.parse(add_test_case_request.body)
+    expect(body).to be == {"title" => "a great test", "type_id" => Resttestrail::Requests::Case_Type::SMOKE,
+                           "priority_id" => Resttestrail::Requests::Case_Priority::MEDIUM}
+    expect(body).not_to have_key("estimate")
+    expect(body).not_to have_key("milestone_id")
+    expect(body).not_to have_key("refs")
+  end
+
+  it "makes the add test case request with wrong case estimate, milestone_id and refs" do
+    add_test_case_request = Resttestrail::Requests.add_case("12345", "a great test",
+                                                            Resttestrail::Requests::Case_Type::SMOKE,
+                                                            Resttestrail::Requests::Case_Priority::MEDIUM,
+                                                            123, "4321", 456)
+    expect(add_test_case_request.method).to eq "POST"
+    expect(add_test_case_request.path).to eq "/index.php?/api/v2/add_case/12345"
+    body = JSON.parse(add_test_case_request.body)
+    expect(body).to be == {"title" => "a great test", "type_id" => Resttestrail::Requests::Case_Type::SMOKE,
+                           "priority_id" => Resttestrail::Requests::Case_Priority::MEDIUM}
+    expect(body).not_to have_key("estimate")
+    expect(body).not_to have_key("milestone_id")
+    expect(body).not_to have_key("refs")
+  end
+
+  it "makes the get test case request" do
+    get_run_request = Resttestrail::Requests.get_case(1234)
+    expect(get_run_request.method).to eq "GET"
+    expect(get_run_request.path).to eq "/index.php?/api/v2/get_case/1234"
+    expect(get_run_request.body).to eq nil
+  end
+
+  it "makes the delete test case request" do
+    request = Resttestrail::Requests.delete_case(1234)
+    expect(request.method).to eq "POST"
+    expect(request.path).to eq "/index.php?/api/v2/delete_case/1234"
+    expect(request.body).to eq nil
+  end
+
   it "makes the add run request" do
     add_run_request = Resttestrail::Requests.add_run("an amazing run", 1234)
     expect(add_run_request.method).to eq "POST"
