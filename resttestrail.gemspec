@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Syed Hussain"]
   spec.email         = ["shussain@groupon.com"]
   spec.summary       = %q{Gem for Testrail rest api}
-  spec.description   = %q{Write a longer description. Optional.}
+  spec.description   = %q{Resttestrail is a ruby gem for the TestRail API (v2) which is available with TestRail 3.0 and later.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
