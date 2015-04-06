@@ -28,6 +28,12 @@ module Resttestrail
       Resttestrail::Client.response(@net_http.request(request))
     end
 
+    def get_cases(suite_id=nil, section_id=nil, filters=nil)
+      # filters are available since TestRail 4.0
+      request = Resttestrail::Requests.get_cases(suite_id, section_id, filters)
+      Resttestrail::Client.response(@net_http.request(request))
+    end
+
     def delete_case(case_id)
       request = Resttestrail::Requests.delete_case(case_id)
       Resttestrail::Client.response(@net_http.request(request))

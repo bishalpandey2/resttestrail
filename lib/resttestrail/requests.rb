@@ -7,6 +7,7 @@ module Resttestrail
     URI = "/index.php?/api/v2"
     ADD_CASE = "/add_case/"
     GET_CASE = "/get_case/"
+    GET_CASES = "/get_cases/"
     DELETE_CASE = "/delete_case/"
     ADD_RUN = "/add_run/"
     GET_RUN = "/get_run/"
@@ -50,6 +51,14 @@ module Resttestrail
 
     def self.get_case(case_id)
       Net::HTTP::Get.new("#{URI}#{GET_CASE}#{case_id}", initheader = {'Content-Type' => 'application/json', 'Authorization' => basic_auth_string})
+    end
+
+    def self.get_cases(suite_id, section_id, filters)
+      uri = "#{URI}#{GET_CASES}#{Resttestrail.config.project_id}"
+      uri += "&suite_id=#{suite_id}" unless suite_id.nil?
+      uri += "&section_id=#{section_id}" unless section_id.nil?
+      uri += "&#{filters}" unless filters.nil?
+      Net::HTTP::Get.new(uri, initheader = {'Content-Type' => 'application/json', 'Authorization' => basic_auth_string})
     end
 
     def self.delete_case(case_id)

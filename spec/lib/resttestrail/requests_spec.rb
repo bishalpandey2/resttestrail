@@ -56,10 +56,24 @@ describe Resttestrail::Requests do
   end
 
   it "makes the get test case request" do
-    get_run_request = Resttestrail::Requests.get_case(1234)
-    expect(get_run_request.method).to eq "GET"
-    expect(get_run_request.path).to eq "/index.php?/api/v2/get_case/1234"
-    expect(get_run_request.body).to eq nil
+    get_case_request = Resttestrail::Requests.get_case(1234)
+    expect(get_case_request.method).to eq "GET"
+    expect(get_case_request.path).to eq "/index.php?/api/v2/get_case/1234"
+    expect(get_case_request.body).to eq nil
+  end
+
+  it "makes the get test cases request" do
+    get_cases_request = Resttestrail::Requests.get_cases(2, 3, "priority_id=3,4")
+    expect(get_cases_request.method).to eq "GET"
+    expect(get_cases_request.path).to eq "/index.php?/api/v2/get_cases/37&suite_id=2&section_id=3&priority_id=3,4"
+    expect(get_cases_request.body).to eq nil
+  end
+
+  it "makes the get test cases request for a suite" do
+    get_cases_request = Resttestrail::Requests.get_cases(2, nil, nil)
+    expect(get_cases_request.method).to eq "GET"
+    expect(get_cases_request.path).to eq "/index.php?/api/v2/get_cases/37&suite_id=2"
+    expect(get_cases_request.body).to eq nil
   end
 
   it "makes the delete test case request" do

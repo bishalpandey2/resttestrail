@@ -14,6 +14,7 @@ module Resttestrail
   Resttestrail.config.username = "bizops-testeng1@groupon.com"
   Resttestrail.config.password = "password"
   suite_id = 1261
+  section_id = 24319
   test_case_id = 197611
 
   puts "host = #{Resttestrail.config.host}, port = #{Resttestrail.config.port}"
@@ -21,7 +22,11 @@ module Resttestrail
   begin
     client = Resttestrail::Client.instance
 
-    new_test_case_id = client.add_case(72621, "a new test case - delete me",
+    client.get_case(test_case_id)
+
+    response = client.get_cases(suite_id, section_id)[:body]
+
+    new_test_case_id = client.add_case(section_id, "a new test case - delete me",
                                     Resttestrail::Requests::Case_Type::FUNCTIONALITY,
                                     Resttestrail::Requests::Case_Priority::MEDIUM,
                                     estimate="1m 14s", milestone_id=nil, refs="REF1 REF2")
